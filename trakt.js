@@ -74,7 +74,7 @@
           if (error.response.statusCode == 401) {
             throw new Error(error.response.headers["www-authenticate"]);
           } else {
-            throw new error;
+            throw error;
           }
         });
     };
