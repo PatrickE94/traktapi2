@@ -1,7 +1,7 @@
 # TraktApi2
 A Trakt.tv API wrapper for their new APIv2 for Node.js.
 
-Using [Q library](http://documentup.com/kriskowal/q/).
+Using [got library](https://github.com/sindresorhus/got).
 
 ## Todo
 * Verify functions
