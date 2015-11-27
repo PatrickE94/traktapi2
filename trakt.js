@@ -67,14 +67,14 @@
           var body = JSON.parse(response.body);
           rThis._refreshToken = body.refresh_token;
           rThis._accessToken = body.access_token;
-          rThis._tokenExpires = Date.now() + body.expires_in;
+          rThis._tokenExpires = (body.created_at * 1000) + (body.expires_in * 1000);
           return body;
         })
         .catch(function(error){
           if (error.response.statusCode == 401) {
             throw new Error(error.response.headers["www-authenticate"]);
           } else {
-            throw new Error(error);
+            throw error;
           }
         });
     };
@@ -120,7 +120,7 @@
           client_id: this._client_id,
           client_secret: this._client_secret,
           redirect_uri: this._redirect_uri,
-          grant_type: "authorization_code"
+          grant_type: "refresh_token"
         })
       });
     };
