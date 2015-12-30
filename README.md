@@ -3,9 +3,6 @@ A Trakt.tv API wrapper for their new APIv2 for Node.js.
 
 Using [got library](https://github.com/sindresorhus/got).
 
-## Todo
-* Verify functions
-
 ## Example usage
 
 ### Initialize
@@ -59,7 +56,9 @@ trakt.setAccessToken(tokenObj); // restore token
 ```
 
 ### Actual API requests
-See methods in methods.json.
+
+To see a list of methods and code path to each Trakt endpoint check out the
+[method map](methods.md).
 
 ```
 trakt
@@ -75,6 +74,10 @@ trakt
     /* shows now contain body response from API (actual show data). */
   });
 ```
+
+## Contributing
+Feel free to do pull requests, forks or anything really. If you find an error
+and don't want to fix it yourself, place an issue and I will look into it!
 
 ## LICENSE
 
