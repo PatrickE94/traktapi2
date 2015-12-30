@@ -241,7 +241,6 @@
         'client_secret': this._settings.client_secret,
         'redirect_uri': this._settings.redirect_uri
       }).then(function(token) {
-        console.log(token);
         this._token = {
           refresh_token: token.refresh_token,
           access_token: token.access_token,
