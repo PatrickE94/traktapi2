@@ -1,6 +1,6 @@
 {
   "name": "traktapi2",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Trakt.tv API wrapper for their new APIv2",
   "main": "trakt.js",
   "scripts": {
