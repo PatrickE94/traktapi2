@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 var Trakt = require("../trakt.js");
+var got = require('got');
 
 describe("TraktAPI2", function(){
 
@@ -9,60 +10,49 @@ describe("TraktAPI2", function(){
         trakt = new Trakt({
           client_id: "id",
           client_secret: "secret",
-          api_url: "https://private-anon-5f899f152-trakt.apiary-mock.com"
+          endpoint: "https://private-anon-266a049e8-trakt.apiary-mock.com"
         }, true);
         cb();
     });
 
     it("should generate a user url for auth", function(done) {
       var str = trakt.authUrl();
-      console.log(str);
+      if (!str) throw str;
       done();
     });
 
-    it("should parse url correctly", function(done) {
-      var str = trakt._parseUrl({
-          "opts": { "auth": "optional", "pagination": false },
-          "method": "GET",
-          "url": "/calendars/movies/:start_date/:days",
-          "optional": [ "start_date", "days" ]
-      });
-      if (str == "https://private-anon-5f899f152-trakt.apiary-mock.com/calendars/movies") done();
-    });
-
-    it("should parse url correctly again", function(done) {
-      var str = trakt._parseUrl({
-          "opts": { "auth": false, "pagination": true },
-          "method": "GET",
-          "url": "/search?query=&type=&year=&id=&id_type=",
-          "optional": [ "type", "query", "id", "id_type" ]
-      }, {query: "hello"});
-      if (str == "https://private-anon-5f899f152-trakt.apiary-mock.com/search?query=hello") done();
-    });
-
-    it("should deliver watchlist for movies", function(done){
+    it("should deliver watchlist for movies", function() {
       this.timeout(30000);
-      trakt.users.watchlist({
+      return trakt.users.watchlist({
           username: 'PatrickE94',
           type: 'movies',
           extended: 'full'
-      }).catch(function(err) {
-        done(err);
-      }).then(function(data) {
-        done();
       });
     });
 
-    it("should deliver popular movies", function(done){
-        this.timeout(30000);
-        trakt.movies.popular({
-            page: 1,
-            limit: 10
-        }).catch(function(err) {
-          done(err);
-        }).then(function(data) {
-          done();
-        });
+    it("should deliver popular movies", function() {
+      this.timeout(30000);
+      return trakt.movies.popular({
+          page: 1,
+          limit: 10
+      });
     });
 
+    it("should fail with a nice message", function(done)  {
+      this.timeout(30000);
+      trakt._call({
+        'method': 'GET',
+        'path': '/test'
+      }).catch(function(err) {
+        return new Error('Failed!');
+      }).then(function(data) {
+        if (data instanceof Error) return done();
+        return done(new Error('Should fail, succeeded somehow?'));
+      });
+    });
+
+    it("should succeed to authorize", function() {
+      this.timeout(30000);
+      return trakt.authorizeCode('NOTVALID, BUT ITS A MOCK SERVER!');
+    });
 });

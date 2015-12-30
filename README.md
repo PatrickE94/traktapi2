@@ -1,7 +1,5 @@
 # TraktApi2
-A Trakt.tv API wrapper for their new APIv2 for Node.js.
-
-Using [got library](https://github.com/sindresorhus/got).
+A promise style Trakt.tv API wrapper for Node.js.
 
 ## Example usage
 
@@ -11,7 +9,9 @@ var Trakt = require('traktapi2');
 var trakt = new Trakt({
   client_id: '',
   client_secret: '',
-  redirect_uri: null // Fallback to urn:ietf:wg:oauth:2.0:oob
+  redirect_uri: null // Defaults to urn:ietf:wg:oauth:2.0:oob,
+  user_agent: 'TraktClientNr1', // Defaults to url for this repository
+  endpoint: 'http://staging.api.trakt.tv' // Defaults to https://api-v2launch.trakt.tv
 });
 ```
 
@@ -24,27 +24,28 @@ var url = trakt.authUrl();
 ```
 trakt
   .authorizeCode("code/PIN", "csrf token (state)")
-  .catch(function(err) { /* Handle error */ })
-  .done(function(result) {
-    if (result == true) {
-      /* API can now be used with authorized requests */
-    } else {
-      /* Bad code/PIN */
-    }
+  .catch(function(err) {
+    /* Detailed error with reason of failure. */
+  })
+  .then(function() {
+    /* API can now be used with authorized requests */
   });
+```
+
+### Check if token needs to be refreshed
+```
+var update = trakt.isTokenExpired() ? 'yes' : 'no';
 ```
 
 ### Refresh token
 ```
 trakt
   .refreshToken()
-  .catch(function(err) { /* Handle error */ })
-  .done(function(result) {
-    if (result == true) {
-      /* API now has an updated access token */
-    } else {
-      /* Bad refresh token or expired */
-    }
+  .catch(function(err) {
+    /* Detailed error with reason of failure. */
+  })
+  .then(function() {
+    /* API now has an updated access token */
   });
 ```
 
@@ -60,6 +61,9 @@ trakt.setAccessToken(tokenObj); // restore token
 To see a list of methods and code path to each Trakt endpoint check out the
 [method map](methods.md).
 
+The parameter extended is available everywhere. But really only useful
+where media objects are returned.
+
 ```
 trakt
   .calendars.all.shows({
@@ -68,10 +72,30 @@ trakt
     extended: "images"
   })
   .catch(function(err) {
-    /* Handle any error */
+    /*
+     * Return error is either a string with a simple message, or an
+     * object with details as provided by error source.
+     * These objects usually looks like this:
+     * {
+     *   error: // Either a string with a trakt error, or the status code returned.
+     *   error_description // A string describing the error
+     *   original_error // Original error item from source
+     *   response // response object provided by got
+     * }
+     */
   })
-  .done(function(shows) {
-    /* shows now contain body response from API (actual show data). */
+  .then(function(shows) {
+    /*
+     * shows now contain body response from API (actual show data).
+     * If API endpoint supports pagination, an additional pagination object
+     * is added to the object.
+     * pagination: {
+     *   page: 0, // Current page
+     *   limit: 10, // Current limit (items per page)
+     *   page-count: 100, // Amount of pages with the current settings
+     *   item-count: 1000, // Amount of actual items.
+     * }
+     */
   });
 ```
 
