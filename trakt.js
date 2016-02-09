@@ -183,7 +183,7 @@
 
         // /part
         options.path = method.path.replace(/\/\:([^\/]+)/gi, function(match, arg) {
-          if (!params[arg] && optional.indexOf(arg) == -1)
+          if (!params[arg] && moptional.indexOf(arg) == -1)
             return reject('Missing parameter \'' + arg + '\'');
 
           if (!params[arg]) return '';
@@ -207,7 +207,7 @@
           var arg = method.query[i];
           if (arg in params) {
             query[arg] = params[arg];
-          } else if (optional.indexOf(arg) == -1) {
+          } else if (moptional.indexOf(arg) == -1) {
             return reject('Missing required parameter \'' + arg + '\'');
           }
         }
@@ -218,7 +218,7 @@
         // Body part
         var body = {};
         for(var i in mbody) {
-          if (!mbody[i] in params && optional.indexOf(mbody[i]) == -1)
+          if (!mbody[i] in params && moptional.indexOf(mbody[i]) == -1)
             return reject('Missing required parameter \'' + mbody[i] + '\'');
 
           body[mbody[i]] = params[mbody[i]];
@@ -239,7 +239,7 @@
         'grant_type': body.grant_type,
         'client_id': this._settings.client_id,
         'client_secret': this._settings.client_secret,
-        'redirect_uri': this._settings.redirect_uri
+        'redirect_uri': this._settings.redirect_uriop
       }).then(function(token) {
         this._token = {
           refresh_token: token.refresh_token,
