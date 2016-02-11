@@ -183,7 +183,7 @@
 
         // /part
         options.path = method.path.replace(/\/\:([^\/]+)/gi, function(match, arg) {
-          if (!params[arg] && optional.indexOf(arg) == -1)
+          if (!params[arg] && moptional.indexOf(arg) == -1)
             return reject('Missing parameter \'' + arg + '\'');
 
           if (!params[arg]) return '';
@@ -207,7 +207,7 @@
           var arg = method.query[i];
           if (arg in params) {
             query[arg] = params[arg];
-          } else if (optional.indexOf(arg) == -1) {
+          } else if (moptional.indexOf(arg) == -1) {
             return reject('Missing required parameter \'' + arg + '\'');
           }
         }
@@ -218,7 +218,7 @@
         // Body part
         var body = {};
         for(var i in mbody) {
-          if (!mbody[i] in params && optional.indexOf(mbody[i]) == -1)
+          if (!mbody[i] in params && moptional.indexOf(mbody[i]) == -1)
             return reject('Missing required parameter \'' + mbody[i] + '\'');
 
           body[mbody[i]] = params[mbody[i]];
