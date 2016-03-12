@@ -210,7 +210,7 @@
       "path": "/people/:id/shows"
   },
   "/recommendations/movies/get": {
-      "options": { "auth": "required" },
+      "options": { "auth": "required", "pagination": true },
       "method": "GET",
       "path": "/recommendations/movies",
       "query": [ "limit" ],
@@ -222,7 +222,7 @@
       "path": "/recommendations/movies/:id"
   },
   "/recommendations/shows/get": {
-      "options": { "auth": "required" },
+      "options": { "auth": "required", "pagination": true },
       "method": "GET",
       "path": "/recommendations/shows",
       "query": [ "limit" ],
@@ -451,8 +451,8 @@
   "/sync/ratings/get": {
       "options": { "auth": "required" },
       "method": "GET",
-      "path": "/sync/ratings/:type/rating",
-      "optional": [ "rating" ]
+      "path": "/sync/ratings/:type/:rating",
+      "optional": [ "rating", "type" ]
   },
   "/sync/ratings/add": {
       "options": { "auth": "required" },
@@ -487,6 +487,13 @@
       "options": { "auth": "required" },
       "method": "GET",
       "path": "/users/settings"
+  },
+  "/users/hidden": {
+      "options": { "auth": "required", "pagination": true },
+      "method": "GET",
+      "path": "/users/hidden/:section",
+      "query": [ "type" ],
+      "optional": [ "type" ]
   },
   "/users/requests/get": {
       "options": { "auth": "required" },
@@ -613,7 +620,7 @@
       "options": { "auth": "optional" },
       "method": "GET",
       "path": "/users/:username/ratings/:type/:rating",
-      "optional": [ "rating" ]
+      "optional": [ "rating", "type" ]
   },
   "/users/watchlist": {
       "options": { "auth": "optional" },
