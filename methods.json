@@ -1,4 +1,14 @@
 {
+  "/oauth/device/code": {
+    "method": "POST",
+    "path": "/oauth/device/code",
+    "body": [ "client_id" ]
+  },
+  "/oauth/device/token": {
+    "method": "POST",
+    "path": "/oauth/device/token",
+    "body": [ "client_id", "client_secret", "code" ]
+  },
   "/oauth/token": {
     "method": "POST",
     "path": "/oauth/token",

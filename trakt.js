@@ -6,6 +6,7 @@
     var got = require('got');
     var crypto = require('crypto');
     var methods = require('./methods.json');
+    var TraktDeviceAuthPoller = require('./traktDeviceAuthPoller');
 
     function Trakt(settings) {
       if (!settings)
@@ -31,6 +32,23 @@
 
     var prot = Trakt.prototype;
 
+    /**
+     * Authorize a new device using the new Device Auth method.
+     */
+    prot.authorizeDevice = function authorizeDevice(displayCodeCallback) {
+      return this.oauth.device.code({
+        'client_id': this._settings.client_id
+      }).then(function(body) {
+
+        displayCodeCallback({
+          user_code: body.user_code,
+          verification_url: body.verification_url
+        });
+
+        return new TraktDeviceAuthPoller(this, body);
+      }.bind(this));
+    };
+
     prot.authUrl = function() {
       this._authState = crypto.randomBytes(6).toString('hex');
       return 'https://trakt.tv/oauth/authorize?response_type=code&client_id='
@@ -40,7 +58,7 @@
     };
 
     /**
-     * Authorize received Code or PIN.
+     * Authorize received Code or PIN (soon deprecated).
      */
     prot.authorizeCode = function authorizeCode(code, state) {
       if (state && state != this._authState)

@@ -20,6 +20,27 @@ var trakt = new Trakt({
 var url = trakt.authUrl();
 ```
 
+### Authorize device
+```
+trakt
+  .authorizeDevice(function(code) {
+    /*
+     * {
+     *   user_code: 'Display this code to the user',
+     *   verification_url: 'https://trakt.tv/activate',
+     * }
+     */
+  })
+  .then(function(result) {
+    /* Result is true if the user allowed and false if the user explicitly denied. */
+  })
+  .catch(function(error) {
+    /* Detailed error with failure reason.
+     * You will probably want to try again.
+     */
+  });
+```
+
 ### Verify code/PIN (and optionally state) from returned auth
 ```
 trakt
