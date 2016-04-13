@@ -4,7 +4,8 @@
   "description": "A Trakt.tv API wrapper for their new APIv2",
   "main": "trakt.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "buildapidoc": "./node_modules/documentation/bin/documentation.js build trakt.js -f md -o API.md"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   "homepage": "https://github.com/PatrickE94/traktapi2",
   "devDependencies": {
     "chai": "^1.10.0",
+    "documentation": "^4.0.0-beta2",
     "mocha": "^2.1.0"
   },
   "dependencies": {

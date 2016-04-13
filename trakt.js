@@ -8,6 +8,25 @@
     var methods = require('./methods.json');
     var TraktDeviceAuthPoller = require('./traktDeviceAuthPoller');
 
+    /**
+     * Initializer for a new Trakt connection instance.
+     *
+     * Settings and their default values:
+     * ```(javascript)
+     * {
+     * 	client_id: 'REQUIRED',
+     * 	client_secret: 'REQUIRED'
+     * 	redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+     * 	api_protocol: 'https:',
+     * 	api_host: 'api-v2launch.trakt.tv',
+     * 	user_agent: 'https://github.com/PatrickE94/traktapi2'
+     * }
+     * ```
+     *
+     * @namespace
+     * @param   {Object} settings Settings needed initial settings for Trakt API.
+     * @returns {Trakt}           A new Trakt API instance ready for usage.
+     */
     function Trakt(settings) {
       if (!settings)
         throw new Error('No settings provided');
@@ -30,10 +49,21 @@
       return this;
     }
 
+    /**
+     * Shortcut to Trakt's prototype.
+     *
+     * @private
+     * @memberof Trakt
+     */
     var prot = Trakt.prototype;
 
     /**
      * Authorize a new device using the new Device Auth method.
+     *
+     * @memberof Trakt
+     * @param function  displayCodeCallback callback with code to
+     *                                      display to the user.
+     * @return Promise                      A promise with the auth result.
      */
     prot.authorizeDevice = function authorizeDevice(displayCodeCallback) {
       return this.oauth.device.code({
@@ -49,6 +79,12 @@
       }.bind(this));
     };
 
+    /**
+     * Generate an authentication url for PIN and OAuth auth.
+     *
+     * @memberof Trakt
+     * @return {String} URL to give user to receive PIN code.
+     */
     prot.authUrl = function() {
       this._authState = crypto.randomBytes(6).toString('hex');
       return 'https://trakt.tv/oauth/authorize?response_type=code&client_id='
@@ -59,6 +95,8 @@
 
     /**
      * Authorize received Code or PIN (soon deprecated).
+     *
+     * @memberof Trakt
      */
     prot.authorizeCode = function authorizeCode(code, state) {
       if (state && state != this._authState)
@@ -72,6 +110,9 @@
 
     /**
      * Request new refresh token.
+     *
+     * @memberof Trakt
+     * @return {Promise} TODO:
      */
     prot.refreshToken = function() {
       if (!this._token.refresh_token)
@@ -85,6 +126,10 @@
 
     /**
      * Restore serialized access token.
+     *
+     * @memberof Trakt
+     * @param  {Object} token Token as serialized by `serializeToken`
+     * @return {Object} Returns itself (this) for chaining.
      */
     prot.setAccessToken = function(token) {
       if (token.access_token === undefined
@@ -98,6 +143,9 @@
 
     /**
      * Get serialized access token for persistance.
+     *
+     * @memberof Trakt
+     * @return {Object} Token in a serialized format, good for storage.
      */
     prot.serializeToken = function() {
       return this._token;
@@ -105,6 +153,10 @@
 
     /**
      * Returns true if token needs to be refreshed.
+     *
+     * @memberof Trakt
+     * @return {bool} True if the current access token is expired and needs to
+     *                be refreshed.
      */
     prot.isTokenExpired = function() {
       return Date.now() > this._token.expires;
@@ -116,6 +168,9 @@
 
     /**
      * Quick parsing for responses as defined by Trakt.
+     *
+     * @private
+     * @memberof Trakt
      */
     prot._respCodeToStr = function(code) {
       switch(code) {
@@ -140,6 +195,9 @@
 
     /**
      * Actually checks response for errors which can be normalized and enhanced.
+     *
+     * @private
+     * @memberof Trakt
      */
     prot._handleResponse = function(resolve, reject, error, body, response) {
       var statusCode = response.statusCode;
@@ -169,6 +227,9 @@
 
     /**
      * Actual execution of a method with given parameters.
+     *
+     * @private
+     * @memberof Trakt
      */
     prot._call = function(method, params) {
       params = params || {};
@@ -250,6 +311,9 @@
 
     /**
      * Specifically handles oauth requests.
+     *
+     * @private
+     * @memberof Trakt
      */
     prot._authRequest = function(body) {
       return this.oauth.token({
@@ -270,6 +334,9 @@
 
     /**
      * Creates methods for all requests
+     *
+     * @private
+     * @memberof Trakt
      */
     prot._construct = function() {
       for(var path in methods) {

@@ -1,10 +1,15 @@
 # TraktApi2
+
 A promise style Trakt.tv API wrapper for Node.js.
+
+*   [API Reference](API.md)
+*   [Methods map](methods.md)
 
 ## Example usage
 
 ### Initialize
-```
+
+```(javascript)
 var Trakt = require('traktapi2');
 var trakt = new Trakt({
   client_id: '',
@@ -16,12 +21,14 @@ var trakt = new Trakt({
 ```
 
 ### Generate Auth URL
-```
+
+```(javascript)
 var url = trakt.authUrl();
 ```
 
 ### Authorize device
-```
+
+```(javascript)
 trakt
   .authorizeDevice(function(code) {
     /*
@@ -42,7 +49,8 @@ trakt
 ```
 
 ### Verify code/PIN (and optionally state) from returned auth
-```
+
+```(javascript)
 trakt
   .authorizeCode("code/PIN", "csrf token (state)")
   .catch(function(err) {
@@ -54,12 +62,14 @@ trakt
 ```
 
 ### Check if token needs to be refreshed
-```
+
+```(javascript)
 var update = trakt.isTokenExpired() ? 'yes' : 'no';
 ```
 
 ### Refresh token
-```
+
+```(javascript)
 trakt
   .refreshToken()
   .catch(function(err) {
@@ -71,7 +81,8 @@ trakt
 ```
 
 ### Storing token over sessions
-```
+
+```(javascript)
 var tokenObj = trakt.serializeToken(); // get token
 /* Do storage and reloading etc here */
 trakt.setAccessToken(tokenObj); // restore token
@@ -85,7 +96,7 @@ To see a list of methods and code path to each Trakt endpoint check out the
 The parameter extended is available everywhere. But really only useful
 where media objects are returned.
 
-```
+```(javascript)
 trakt
   .calendars.all.shows({
     start_date: "today",
@@ -121,6 +132,7 @@ trakt
 ```
 
 ## Contributing
+
 Feel free to do pull requests, forks or anything really. If you find an error
 and don't want to fix it yourself, place an issue and I will look into it!
 
