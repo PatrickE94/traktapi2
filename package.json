@@ -5,6 +5,8 @@
   "main": "trakt.js",
   "scripts": {
     "test": "mocha",
+    "checkmethods": "node tools/generateMethods.js && node tools/compareMethodsChanges.js",
+    "updatemethods": "node tools/generateMethods.js && mv methods_new.json methods.json && node tools/generateMethodsDoc.js",
     "buildapidoc": "./node_modules/documentation/bin/documentation.js build trakt.js -f md -o API.md"
   },
   "repository": {
@@ -27,7 +29,8 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "documentation": "^4.0.0-beta2",
-    "mocha": "^2.1.0"
+    "mocha": "^2.1.0",
+    "protagonist": "^1.3.0-pre.1"
   },
   "dependencies": {
     "got": "^5.1.0",
