@@ -1,0 +1,308 @@
+# Methods changing
+
+## 1.3.* -> 1.4.*
+
+Method name changes:
+----------------------------------------
+
+  Added: /oauth/authorize
+  Added: /oauth/revoke
+  Moved: /calendars/my/new_shows => /calendars/my/shows/new
+  Moved: /calendars/my/premieres_shows => /calendars/my/shows/premieres
+  Moved: /calendars/all/new_shows => /calendars/all/shows/new
+  Moved: /calendars/all/premieres_shows => /calendars/all/shows/premieres
+  Moved: /checkin/delete => /checkin/remove
+  Moved: /comments/comment/add => /comments/add
+  Moved: /comments/comment/get => /comments/get
+  Moved: /comments/comment/update => /comments/update
+  Moved: /comments/comment/remove => /comments/remove
+  Moved: /recommendations/movies/get => /recommendations/movies
+  Moved: /recommendations/shows/get => /recommendations/shows
+  Moved: /seasons/summary => /shows/seasons
+  Moved: /seasons/season => /season/summary
+  Added: /season/comments
+  Moved: /seasons/ratings => /season/ratings
+  Added: /season/stats
+  Moved: /seasons/watching => /season/watching
+  Moved: /episodes/summary => /episode/summary
+  Added: /episode/comments
+  Moved: /episodes/ratings => /episode/ratings
+  Moved: /episodes/stats => /episode/stats
+  Moved: /episodes/watching => /episode/watching
+  Moved: /users/requests/approve => /users/requests/add
+  Moved: /users/requests/deny => /users/requests/remove
+  Added: /users/likes
+  Moved: /users/profile => /users
+  Moved: /users/comment => /users/comments
+  Moved: /users/lists/create => /users/lists/add
+  Moved: /users/list/delete => /users/list/remove
+  Added: /users/lists/comments
+Removed: /seasons/comments
+Removed: /episodes/comments
+Removed: /users/list/comments
+----------------------------------------
+
+Changes in existing methods: 
+----------------------------------------
+
+/oauth/token
+  body:
+    + refresh_token
+
+
+/checkin/add
+  body:
+    + show
+    + message
+    + venue_id
+    + venue_name
+    + app_version
+    + app_date
+  optional:
+    + show
+    + message
+    + venue_id
+    + venue_name
+    + app_version
+    + app_date
+
+
+/comments/replies/get
+  options:
+    - auth
+
+
+/comments/replies/add
+  optional:
+    + spoiler
+
+
+/movies/played
+  optional:
+    + period
+
+
+/movies/watched
+  optional:
+    + period
+
+
+/movies/collected
+  optional:
+    + period
+
+
+/movies/boxoffice
+  options:
+    -  pagination
+
+
+/movies/comments
+  path:
+    /movies/:id/comments => /movies/:id/comments/:sort
+  optional:
+    + sort
+
+
+/movies/related
+  options:
+    + pagination: true
+    
+  query:
+    - limit
+  optional:
+    - limit
+
+
+/scrobble/start
+  body:
+    + show
+  optional:
+    + show
+    + app_version
+    + app_date
+
+
+/scrobble/pause
+  body:
+    + show
+  optional:
+    + show
+    + app_version
+    + app_date
+
+
+/scrobble/stop
+  body:
+    + show
+  optional:
+    + show
+    + app_version
+    + app_date
+
+
+/search
+  query:
+    + year
+  optional:
+    + type
+    + year
+
+
+/shows/collected
+  path:
+    /shows/collected => /shows/collected/:period
+
+
+/shows/comments
+  path:
+    /shows/:id/comments => /shows/:id/comments/:sort
+  optional:
+    + sort
+
+
+/shows/progress/collection
+  optional:
+    + hidden
+    + specials
+
+
+/shows/progress/watched
+  optional:
+    + hidden
+    + specials
+
+
+/shows/related
+  options:
+    + pagination: true
+    
+  query:
+    - limit
+  optional:
+    - limit
+
+
+/sync/playback/get
+  path:
+    /sync/playback => /sync/playback/:type
+  optional:
+    + type
+
+
+/sync/collection/add
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/collection/remove
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/history/add
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/history/remove
+  body:
+    + ids
+  optional:
+    + movies
+    + shows
+    + episodes
+    + ids
+
+
+/sync/ratings/add
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/ratings/remove
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/watchlist/get
+  optional:
+    + type
+
+
+/sync/watchlist/add
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/sync/watchlist/remove
+  optional:
+    + movies
+    + shows
+    + episodes
+
+
+/users/list/update
+  optional:
+    + name
+    + description
+    + privacy
+    + display_numbers
+    + allow_comments
+
+
+/users/list/items/get
+  path:
+    /users/:username/lists/:id/items => /users/:username/lists/:id/items/:type
+  optional:
+    + type
+
+
+/users/list/items/add
+  path:
+    /users/:username/lists/:id/items => /users/:username/lists/:id/items/:type
+  body:
+    + movies
+    + shows
+    + people
+  optional:
+    + type
+
+
+/users/list/items/remove
+  options:
+    + auth: required
+    
+  body:
+    + movies
+    + shows
+    + people
+
+
+/users/history
+  path:
+    /users/:username/history/:type => /users/:username/history/:type/:id
+  optional:
+    + type
+    + id
+
+
+/users/watchlist
+  optional:
+    + type
+
+
+----------------------------------------
+

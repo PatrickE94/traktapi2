@@ -4,6 +4,7 @@ A promise style Trakt.tv API wrapper for Node.js.
 
 *   [API Reference](API.md)
 *   [Methods map](methods.md)
+*   [Methods Changelong](methodsChangelog.txt)
 
 ## Example usage
 
